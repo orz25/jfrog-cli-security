@@ -225,11 +225,13 @@ func TestDownloadAnalyzerManagerIfNeeded(t *testing.T) {
 	setEnvCallBack := clientTests.SetEnvWithCallbackAndAssert(t, coreutils.HomeDir, tempDirPath)
 	defer setEnvCallBack()
 
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	// Download
 	err := jas.DownloadAnalyzerManagerIfNeeded(0)
-	assert.NoError(t, err)
-
-	// Validate Analyzer manager app & checksum.sh2 file exist
+	require.NoError(t, err)
+	// Validate Analyzer manager app & checksum.sh2 file exist-
 	path, err := jas.GetAnalyzerManagerDirAbsolutePath()
 	assert.NoError(t, err)
 	amPath := filepath.Join(path, jas.GetAnalyzerManagerExecutableName())
