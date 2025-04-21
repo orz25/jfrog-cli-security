@@ -241,6 +241,10 @@ func runXrayAuditYarnWithOutput(t *testing.T, format string) string {
 // Tests NuGet audit by providing simple NuGet project + multi-project NuGet project and asserts any error.
 func TestXrayAuditNugetJson(t *testing.T) {
 	integration.InitAuditCTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	var testdata = []struct {
 		projectName        string
 		format             string
@@ -298,6 +302,10 @@ func TestXrayAuditNugetJson(t *testing.T) {
 
 func TestXrayAuditNugetSimpleJson(t *testing.T) {
 	integration.InitAuditCTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	var testdata = []struct {
 		projectName        string
 		format             string
@@ -354,6 +362,10 @@ func testXrayAuditNuget(t *testing.T, projectName, format string, restoreTech st
 
 func TestXrayAuditGradleJson(t *testing.T) {
 	integration.InitAuditJavaTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditGradle(t, string(format.Json))
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 3, Vulnerabilities: 3},
@@ -362,6 +374,10 @@ func TestXrayAuditGradleJson(t *testing.T) {
 
 func TestXrayAuditGradleSimpleJson(t *testing.T) {
 	integration.InitAuditJavaTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditGradle(t, string(format.SimpleJson))
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 3, Vulnerabilities: 3},
@@ -378,6 +394,10 @@ func testXrayAuditGradle(t *testing.T, format string) string {
 
 func TestXrayAuditMavenJson(t *testing.T) {
 	integration.InitAuditJavaTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testAuditMaven(t, string(format.Json))
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 1},
@@ -386,6 +406,10 @@ func TestXrayAuditMavenJson(t *testing.T) {
 
 func TestXrayAuditMavenSimpleJson(t *testing.T) {
 	integration.InitAuditJavaTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testAuditMaven(t, string(format.SimpleJson))
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 1},
@@ -402,12 +426,20 @@ func testAuditMaven(t *testing.T, format string) string {
 
 func TestXrayAuditGoJson(t *testing.T) {
 	integration.InitAuditGoTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditGo(t, false, string(format.Json), "simple-project")
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 4}})
 }
 
 func TestXrayAuditGoSimpleJson(t *testing.T) {
 	integration.InitAuditGoTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditGo(t, true, string(format.SimpleJson), "simple-project")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 3, Vulnerabilities: 4},
@@ -436,6 +468,10 @@ func testXrayAuditGo(t *testing.T, noCreds bool, format, project string) string 
 
 func TestXrayAuditNoTech(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	tempDirPath, createTempDirCallback := coreTests.CreateTempDirWithCallbackAndAssert(t)
 	defer createTempDirCallback()
 	prevWd := securityTestUtils.ChangeWD(t, tempDirPath)
@@ -447,6 +483,10 @@ func TestXrayAuditNoTech(t *testing.T) {
 
 func TestXrayAuditMultiProjects(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	_, cleanUp := securityTestUtils.CreateTestProjectEnvAndChdir(t, filepath.Join(filepath.FromSlash(securityTests.GetTestResourcesPath()), "projects"))
 	defer cleanUp()
 	// Set working-dirs flag with multiple projects
@@ -469,6 +509,10 @@ func TestXrayAuditMultiProjects(t *testing.T) {
 
 func TestXrayAuditPipJson(t *testing.T) {
 	integration.InitAuditPythonTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPip(t, string(format.Json), "")
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 3},
@@ -477,12 +521,20 @@ func TestXrayAuditPipJson(t *testing.T) {
 
 func TestXrayAuditCocoapods(t *testing.T) {
 	integration.InitAuditCocoapodsTest(t, scangraph.CocoapodsScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditCocoapods(t, string(format.Json))
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{Total: &validations.TotalCount{Vulnerabilities: 1}})
 }
 
 func TestXrayAuditSwift(t *testing.T) {
 	output := testXrayAuditSwift(t, string(format.Json))
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Vulnerabilities: 1},
 	})
@@ -490,6 +542,10 @@ func TestXrayAuditSwift(t *testing.T) {
 
 func TestXrayAuditPipSimpleJson(t *testing.T) {
 	integration.InitAuditPythonTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPip(t, string(format.SimpleJson), "")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 3},
@@ -498,12 +554,20 @@ func TestXrayAuditPipSimpleJson(t *testing.T) {
 
 func TestXrayAuditPipJsonWithRequirementsFile(t *testing.T) {
 	integration.InitAuditPythonTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPip(t, string(format.Json), "requirements.txt")
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{Total: &validations.TotalCount{Vulnerabilities: 2}})
 }
 
 func TestXrayAuditPipSimpleJsonWithRequirementsFile(t *testing.T) {
 	integration.InitAuditPythonTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPip(t, string(format.SimpleJson), "requirements.txt")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{Total: &validations.TotalCount{Vulnerabilities: 2}})
 }
@@ -539,6 +603,10 @@ func testXrayAuditSwift(t *testing.T, format string) string {
 
 func TestXrayAuditPipenvJson(t *testing.T) {
 	integration.InitAuditPythonTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPipenv(t, string(format.Json))
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 3},
@@ -547,6 +615,10 @@ func TestXrayAuditPipenvJson(t *testing.T) {
 
 func TestXrayAuditPipenvSimpleJson(t *testing.T) {
 	integration.InitAuditPythonTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPipenv(t, string(format.SimpleJson))
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 3},
@@ -563,6 +635,10 @@ func testXrayAuditPipenv(t *testing.T, format string) string {
 
 func TestXrayAuditPoetryJson(t *testing.T) {
 	integration.InitAuditPythonTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPoetry(t, string(format.Json))
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 3},
@@ -571,6 +647,10 @@ func TestXrayAuditPoetryJson(t *testing.T) {
 
 func TestXrayAuditPoetrySimpleJson(t *testing.T) {
 	integration.InitAuditPythonTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPoetry(t, string(format.SimpleJson))
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 3},
@@ -599,6 +679,10 @@ func addDummyPackageDescriptor(t *testing.T, hasPackageJson bool) {
 
 func TestXrayAuditSastCppFlagSimpleJson(t *testing.T) {
 	integration.InitAuditJasTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("package-managers", "c"), "3", false, "*out*")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total:           &validations.TotalCount{Vulnerabilities: 2},
@@ -608,6 +692,10 @@ func TestXrayAuditSastCppFlagSimpleJson(t *testing.T) {
 func TestXrayAuditSastCSharpFlagSimpleJson(t *testing.T) {
 	// Placeholder until C# Sast is implemented
 	integration.InitAuditJasTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("package-managers", "dotnet", "dotnet-single"), "3", false, "")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total:           &validations.TotalCount{Vulnerabilities: 1},
@@ -617,6 +705,10 @@ func TestXrayAuditSastCSharpFlagSimpleJson(t *testing.T) {
 
 func TestXrayAuditJasMissingContextSimpleJson(t *testing.T) {
 	integration.InitAuditJasTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("package-managers", "maven", "missing-context"), "3", false, "")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Vulnerabilities: &validations.VulnerabilityCount{ValidateApplicabilityStatus: &validations.ApplicabilityStatusCount{MissingContext: 1}},
@@ -649,6 +741,10 @@ func getNoJasAuditMockCommand() components.Command {
 
 func TestXrayAuditJasSimpleJson(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("jas", "jas"), "3", false, "")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Vulnerabilities: 23},
@@ -661,6 +757,10 @@ func TestXrayAuditJasSimpleJson(t *testing.T) {
 
 func TestXrayAuditJasSimpleJsonWithTokenValidation(t *testing.T) {
 	integration.InitAuditGeneralTests(t, jasutils.DynamicTokenValidationMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("jas", "jas"), "3", true, "")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Vulnerabilities: &validations.VulnerabilityCount{
@@ -672,6 +772,10 @@ func TestXrayAuditJasSimpleJsonWithTokenValidation(t *testing.T) {
 
 func TestXrayAuditJasSimpleJsonWithOneThread(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("jas", "jas"), "1", false, "")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Vulnerabilities: 23},
@@ -684,6 +788,10 @@ func TestXrayAuditJasSimpleJsonWithOneThread(t *testing.T) {
 
 func TestXrayAuditJasSimpleJsonWithConfig(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("jas", "jas-config"), "3", false, "")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Vulnerabilities: 8},
@@ -696,6 +804,10 @@ func TestXrayAuditJasSimpleJsonWithConfig(t *testing.T) {
 
 func TestXrayAuditJasNoViolationsSimpleJson(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("package-managers", "npm", "npm"), "3", false, "")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total:           &validations.TotalCount{Vulnerabilities: 1},
@@ -721,6 +833,10 @@ func testXrayAuditJas(t *testing.T, testCli *coreTests.JfrogCli, project string,
 
 func TestXrayAuditDetectTech(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	_, cleanUp := securityTestUtils.CreateTestProjectEnvAndChdir(t, filepath.Join(filepath.FromSlash(securityTests.GetTestResourcesPath()), "projects", "package-managers", "maven", "maven"))
 	defer cleanUp()
 	// Run generic audit on mvn project with a vulnerable dependency
@@ -734,6 +850,10 @@ func TestXrayAuditDetectTech(t *testing.T) {
 
 func TestXrayRecursiveScan(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	projectDir := filepath.Join(filepath.FromSlash(securityTests.GetTestResourcesPath()), "projects", "package-managers")
 	// Creating an inner NPM project
 	tempDirPath, cleanUp := securityTestUtils.CreateTestProjectEnvAndChdir(t, filepath.Join(projectDir, "npm", "npm"))
@@ -759,6 +879,10 @@ func TestXrayRecursiveScan(t *testing.T) {
 
 func TestAuditOnEmptyProject(t *testing.T) {
 	integration.InitAuditGeneralTests(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	_, cleanUp := securityTestUtils.CreateTestProjectEnvAndChdir(t, filepath.Join(filepath.FromSlash(securityTests.GetTestResourcesPath()), filepath.Join("projects", "empty_project", "python_project_with_no_deps")))
 	defer cleanUp()
 	// Configure a new server named "default"
@@ -800,6 +924,10 @@ func TestXrayAuditJasSimpleJsonWithXrayUrl(t *testing.T) {
 
 func TestXrayAuditJasSimpleJsonWithCustomExclusions(t *testing.T) {
 	integration.InitAuditJasTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditJas(t, securityTests.PlatformCli, filepath.Join("jas", "jas"), "3", false, "non_existing_folder")
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Vulnerabilities: 24},
