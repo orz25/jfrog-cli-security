@@ -39,6 +39,10 @@ import (
 
 func TestXrayAuditNpmJson(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testAuditNpm(t, string(format.Json), false)
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total:      &validations.TotalCount{Licenses: 1, Violations: 1},
@@ -49,6 +53,10 @@ func TestXrayAuditNpmJson(t *testing.T) {
 func TestXrayAuditNpmSimpleJson(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
 	output := testAuditNpm(t, string(format.SimpleJson), true)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total:      &validations.TotalCount{Licenses: 1, Vulnerabilities: 1, Violations: 1},
 		Violations: &validations.ViolationCount{ValidateType: &validations.ScaViolationCount{Security: 1}},
@@ -74,6 +82,10 @@ func testAuditNpm(t *testing.T, format string, withVuln bool) string {
 func TestXrayAuditConanJson(t *testing.T) {
 	integration.InitAuditCTest(t, scangraph.GraphScanMinXrayVersion)
 	output := testAuditConan(t, string(format.Json), true)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 2, Vulnerabilities: 8},
 	})
@@ -81,6 +93,10 @@ func TestXrayAuditConanJson(t *testing.T) {
 
 func TestXrayAuditConanSimpleJson(t *testing.T) {
 	integration.InitAuditCTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testAuditConan(t, string(format.SimpleJson), true)
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 2, Vulnerabilities: 8},
@@ -103,6 +119,10 @@ func testAuditConan(t *testing.T, format string, withVuln bool) string {
 
 func TestXrayAuditPnpmJson(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPnpm(t, string(format.Json))
 	validations.VerifyJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 1},
@@ -111,6 +131,10 @@ func TestXrayAuditPnpmJson(t *testing.T) {
 
 func TestXrayAuditPnpmSimpleJson(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	output := testXrayAuditPnpm(t, string(format.SimpleJson))
 	validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
 		Total: &validations.TotalCount{Licenses: 1, Vulnerabilities: 1},
@@ -129,6 +153,10 @@ func testXrayAuditPnpm(t *testing.T, format string) string {
 
 func TestXrayAuditYarnV2Json(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	testXrayAuditYarn(t, "yarn-v2", func() {
 		output := runXrayAuditYarnWithOutput(t, string(format.Json))
 		validations.VerifyJsonResults(t, output, validations.ValidationParams{
@@ -139,6 +167,10 @@ func TestXrayAuditYarnV2Json(t *testing.T) {
 
 func TestXrayAuditYarnV2SimpleJson(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	testXrayAuditYarn(t, "yarn-v3", func() {
 		output := runXrayAuditYarnWithOutput(t, string(format.SimpleJson))
 		validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
@@ -149,6 +181,10 @@ func TestXrayAuditYarnV2SimpleJson(t *testing.T) {
 
 func TestXrayAuditYarnV1Json(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	testXrayAuditYarn(t, "yarn-v1", func() {
 		output := runXrayAuditYarnWithOutput(t, string(format.Json))
 		validations.VerifyJsonResults(t, output, validations.ValidationParams{
@@ -161,6 +197,10 @@ func TestXrayAuditYarnV1JsonWithoutDevDependencies(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
 	unsetEnv := clientTests.SetEnvWithCallbackAndAssert(t, "NODE_ENV", "production")
 	defer unsetEnv()
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	testXrayAuditYarn(t, "yarn-v1", func() {
 		output := runXrayAuditYarnWithOutput(t, string(format.Json))
 		var results []services.ScanResponse
@@ -172,6 +212,10 @@ func TestXrayAuditYarnV1JsonWithoutDevDependencies(t *testing.T) {
 
 func TestXrayAuditYarnV1SimpleJson(t *testing.T) {
 	integration.InitAuditJavaScriptTest(t, scangraph.GraphScanMinXrayVersion)
+	// Configure a new server named "default"
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	testXrayAuditYarn(t, "yarn-v1", func() {
 		output := runXrayAuditYarnWithOutput(t, string(format.SimpleJson))
 		validations.VerifySimpleJsonResults(t, output, validations.ValidationParams{
