@@ -225,6 +225,9 @@ func TestDownloadAnalyzerManagerIfNeeded(t *testing.T) {
 	setEnvCallBack := clientTests.SetEnvWithCallbackAndAssert(t, coreutils.HomeDir, tempDirPath)
 	defer setEnvCallBack()
 
+	securityIntegrationTestUtils.CreateJfrogHomeConfig(t, true)
+	defer securityTestUtils.CleanTestsHomeEnv()
+
 	// Download
 	err := jas.DownloadAnalyzerManagerIfNeeded(0)
 	assert.NoError(t, err)
