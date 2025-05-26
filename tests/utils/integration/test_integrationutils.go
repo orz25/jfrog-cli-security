@@ -226,10 +226,10 @@ func authenticateXray(xrayUrlOnly bool) string {
 	*configTests.JfrogUrl = clientUtils.AddTrailingSlashIfNeeded(*configTests.JfrogUrl)
 	var cred string
 	if xrayUrlOnly {
-		configTests.XrDetails = &config.ServerDetails{XrayUrl: *configTests.JfrogUrl + configTests.XrayEndpoint}
+		configTests.XrDetails = &config.ServerDetails{XrayUrl: *configTests.JfrogUrl + configTests.XrayEndpoint, ServerId: "default"}
 		cred = fmt.Sprintf("--xray-url=%s", configTests.XrDetails.XrayUrl)
 	} else {
-		configTests.XrDetails = &config.ServerDetails{Url: *configTests.JfrogUrl, ArtifactoryUrl: *configTests.JfrogUrl + configTests.ArtifactoryEndpoint, XrayUrl: *configTests.JfrogUrl + configTests.XrayEndpoint}
+		configTests.XrDetails = &config.ServerDetails{Url: *configTests.JfrogUrl, ArtifactoryUrl: *configTests.JfrogUrl + configTests.ArtifactoryEndpoint, XrayUrl: *configTests.JfrogUrl + configTests.XrayEndpoint, ServerId: "default"}
 		cred = fmt.Sprintf("--url=%s", configTests.XrDetails.XrayUrl)
 	}
 	if *configTests.JfrogAccessToken != "" {
@@ -251,7 +251,7 @@ func authenticateXray(xrayUrlOnly bool) string {
 
 func AuthenticateXsc() string {
 	*configTests.JfrogUrl = clientUtils.AddTrailingSlashIfNeeded(*configTests.JfrogUrl)
-	configTests.XscDetails = &config.ServerDetails{Url: *configTests.JfrogUrl, ArtifactoryUrl: *configTests.JfrogUrl + configTests.ArtifactoryEndpoint, XrayUrl: *configTests.JfrogUrl + configTests.XrayEndpoint, XscUrl: *configTests.JfrogUrl + configTests.XscEndpoint}
+	configTests.XscDetails = &config.ServerDetails{Url: *configTests.JfrogUrl, ArtifactoryUrl: *configTests.JfrogUrl + configTests.ArtifactoryEndpoint, XrayUrl: *configTests.JfrogUrl + configTests.XrayEndpoint, XscUrl: *configTests.JfrogUrl + configTests.XscEndpoint, ServerId: "default"}
 	cred := fmt.Sprintf("--url=%s", configTests.XscDetails.XrayUrl)
 	if *configTests.JfrogAccessToken != "" {
 
@@ -273,7 +273,7 @@ func AuthenticateXsc() string {
 
 func AuthenticateArtifactory() string {
 	*configTests.JfrogUrl = clientUtils.AddTrailingSlashIfNeeded(*configTests.JfrogUrl)
-	configTests.RtDetails = &config.ServerDetails{Url: *configTests.JfrogUrl, ArtifactoryUrl: *configTests.JfrogUrl + configTests.ArtifactoryEndpoint, SshKeyPath: *configTests.JfrogSshKeyPath, SshPassphrase: *configTests.JfrogSshPassphrase}
+	configTests.RtDetails = &config.ServerDetails{Url: *configTests.JfrogUrl, ArtifactoryUrl: *configTests.JfrogUrl + configTests.ArtifactoryEndpoint, SshKeyPath: *configTests.JfrogSshKeyPath, SshPassphrase: *configTests.JfrogSshPassphrase, ServerId: "default"}
 
 	if !fileutils.IsSshUrl(configTests.RtDetails.ArtifactoryUrl) {
 		if *configTests.JfrogAccessToken != "" {
